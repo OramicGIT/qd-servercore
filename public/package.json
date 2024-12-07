@@ -1,0 +1,14 @@
+{
+  "name": "gd-map",
+  "version": "1.0.0",
+  "description": "Geometry Dash 2.21 game",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
