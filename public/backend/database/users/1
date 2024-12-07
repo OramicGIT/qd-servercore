@@ -1,1 +1,23 @@
+{
+  //USER CLASS
+  perms:"Elder"
+  owngame:"true"
+  canall:"true:debugyes"
+  developer:"1"
+  name:"Oramic"
+  clan:"Oramic Studio"
+  
+  //RENDER CLASS
+  commentscol:"0,255,0
+  can_server:"true"
 
+  //VALUES
+  orbs:"0"
+  diamonds:"0"
+  icons:"default pack"
+  coins1:"0"
+  coins2:"0"
+  coins3:"0"
+  versuspoints:"0"
+  stars:"0"
+}
