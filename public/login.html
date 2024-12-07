@@ -97,26 +97,7 @@ button:hover {
     <p>Oramic Studio &copy; 2024</p>
 </div>
 
-<script>
-document.getElementById('accountForm').addEventListener('submit', function(event) {
-    event.preventDefault();
-
-    const username = document.getElementById('username').value;
-    const password = document.getElementById('password').value;
-
-    fetch('/account', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, password })
-    })
-    .then(response => response.json())
-    .then(data => {
-        alert(data.message);
-    })
-    .catch(error => {
-        console.error('Ошибка:', error);
-    });
-});
-</script>
+<!-- Подключение login.js -->
+<script src="/login.js"></script>
 </body>
 </html>
