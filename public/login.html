@@ -83,22 +83,13 @@ button:hover {
 </head>
 <body>
 <div class="container">
-    <h1>Регистрация аккаунта</h1>
-    <form id="registrationForm">
-        <label for="regUsername">Имя пользователя:</label>
-        <input type="text" id="regUsername" name="username" required>
-        <label for="regPassword">Пароль:</label>
-        <input type="password" id="regPassword" name="password" required>
-        <button type="submit">Зарегистрироваться</button>
-    </form>
-
-    <h1>Вход в аккаунт</h1>
-    <form id="loginForm">
-        <label for="loginUsername">Имя пользователя:</label>
-        <input type="text" id="loginUsername" name="username" required>
-        <label for="loginPassword">Пароль:</label>
-        <input type="password" id="loginPassword" name="password" required>
-        <button type="submit">Войти</button>
+    <h1>Регистрация и Вход</h1>
+    <form id="accountForm">
+        <label for="username">Имя пользователя:</label>
+        <input type="text" id="username" name="username" required>
+        <label for="password">Пароль:</label>
+        <input type="password" id="password" name="password" required>
+        <button type="submit">Зарегистрироваться/Войти</button>
     </form>
 </div>
 
@@ -107,33 +98,13 @@ button:hover {
 </div>
 
 <script>
-document.getElementById('registrationForm').addEventListener('submit', function(event) {
+document.getElementById('accountForm').addEventListener('submit', function(event) {
     event.preventDefault();
 
-    const username = document.getElementById('regUsername').value;
-    const password = document.getElementById('regPassword').value;
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
 
-    fetch('/register', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, password })
-    })
-    .then(response => response.json())
-    .then(data => {
-        alert(data.message);
-    })
-    .catch(error => {
-        console.error('Ошибка:', error);
-    });
-});
-
-document.getElementById('loginForm').addEventListener('submit', function(event) {
-    event.preventDefault();
-
-    const username = document.getElementById('loginUsername').value;
-    const password = document.getElementById('loginPassword').value;
-
-    fetch('/login', {
+    fetch('/account', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, password })
