@@ -7,7 +7,7 @@ const app = express();
 const PORT = 3000;
 
 // Путь к папке users
-const USERS_DIR = path.join(__dirname, 'public/backend/database/users');
+const USERS_DIR = path.join(__dirname, './backend/database/users');
 
 // Middleware
 app.use(bodyParser.json());
@@ -22,7 +22,7 @@ function getUniqueFilename() {
 }
 
 // Регистрация
-app.post('/register', (req, res) => {
+app.post('login.html', (req, res) => {
     const { username, password } = req.body;
 
     if (!username || !password) {
@@ -57,7 +57,7 @@ app.post('/register', (req, res) => {
 });
 
 // Вход
-app.post('/login', (req, res) => {
+app.post('login.html', (req, res) => {
     const { username, password } = req.body;
 
     const files = fs.readdirSync(USERS_DIR);
