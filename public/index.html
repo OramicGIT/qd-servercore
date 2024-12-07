@@ -83,6 +83,29 @@ p {
     font-size: 1rem;
     border-top: 2px solid #ff4500;
 }
+
+.button-container {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.button {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 1.2rem;
+    color: #fff;
+    background: linear-gradient(90deg, #00c3ff, #0066ff);
+    text-decoration: none;
+    border-radius: 8px;
+    box-shadow: 0 3px 10px rgba(0, 102, 255, 0.7);
+    transition: all 0.3s ease;
+}
+
+.button:hover {
+    background: linear-gradient(90deg, #0066ff, #00c3ff);
+    transform: scale(1.05);
+    box-shadow: 0 5px 15px rgba(0, 102, 255, 0.9);
+}
 </style>
 </head>
 <body>
@@ -101,6 +124,9 @@ p {
                 <li>Секреты...</li>
             </ul>
         </div>
+    </div>
+    <div class="button-container">
+        <a href="login.html" class="button">Регистрация или Вход</a>
     </div>
 </div>
 <div class="footer">
