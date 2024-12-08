@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Голосование</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #121212;
+            color: #f0f0f0;
+            text-align: center;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: #222;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.8);
+        }
+        h1 {
+            color: #ffdd00;
+        }
+        label {
+            display: block;
+            margin-top: 10px;
+            font-size: 1.2rem;
+        }
+        input[type="radio"] {
+            margin-right: 10px;
+        }
+        button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #ff4500;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #ff8800;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 id="poll-title">Загружается...</h1>
+        <form name="voteForm" method="POST" data-netlify="true" id="poll-form"></form>
+    </div>
+    <script>
+        // Настройки голосования
+        const pollData = {
+            title: "Какой ваш любимый цвет?", // Заголовок
+            options: [                         // Варианты
+                "Красный",
+                "Синий",
+                "Зеленый",
+                "Желтый"
+            ]
+        };
+
+        // Обновление HTML формы на основе настроек
+        const pollTitle = document.getElementById("poll-title");
+        const pollForm = document.getElementById("poll-form");
+
+        // Установка заголовка
+        pollTitle.textContent = pollData.title;
+
+        // Добавление вариантов
+        pollData.options.forEach(option => {
+            const label = document.createElement("label");
+            label.innerHTML = `<input type="radio" name="color" value="${option}" required> ${option}`;
+            pollForm.appendChild(label);
+        });
+
+        // Добавление кнопки отправки
+        const submitButton = document.createElement("button");
+        submitButton.type = "submit";
+        submitButton.textContent = "Проголосовать";
+        pollForm.appendChild(submitButton);
+    </script>
+</body>
+</html>
