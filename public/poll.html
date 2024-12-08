@@ -50,7 +50,9 @@
 <body>
     <div class="container">
         <h1 id="poll-title">Загружается...</h1>
-        <form name="voteForm" method="POST" data-netlify="true" id="poll-form"></form>
+        <form name="voteForm" method="POST" data-netlify="true" id="poll-form">
+            <input type="hidden" name="form-name" value="voteForm">
+        </form>
     </div>
     <script>
         // Настройки голосования
