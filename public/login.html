@@ -3,115 +3,115 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Управлением аккаунтом</title>
+<title>Управление аккаунтом</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Russo+One&display=swap');
 
 body {
-font-family: 'Russo One', sans-serif;
-background: linear-gradient(90deg, #000000, #121212);
-color: #f0f0f0;
-margin: 0;
-padding: 0;
+    font-family: 'Russo One', sans-serif;
+    background: linear-gradient(90deg, #000000, #121212);
+    color: #f0f0f0;
+    margin: 0;
+    padding: 0;
 }
 
 .container {
-width: 90%;
-max-width: 1200px;
-margin: 30px auto;
-background: #222;
-padding: 20px;
-border-radius: 15px;
-box-shadow: 0 8px 30px rgba(0, 0, 0, 0.8);
-border: 3px solid #ff4500;
+    width: 90%;
+    max-width: 1200px;
+    margin: 30px auto;
+    background: #222;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.8);
+    border: 3px solid #ff4500;
 }
 
 h1 {
-color: #ffdd00;
-text-align: center;
-text-shadow: 0 3px 10px rgba(255, 255, 0, 0.7);
-font-size: 2.8rem;
-margin-bottom: 10px;
-}
-
-form {
-margin-bottom: 30px;
-}
-
-label {
-display: block;
-margin: 10px 0 5px;
-font-size: 1.2rem;
-}
-
-input[type="text"], input[type="password"] {
-width: 100%;
-padding: 10px;
-margin-bottom: 10px;
-border: 2px solid #ff4500;
-border-radius: 5px;
-background: #333;
-color: #ffdd00;
+    color: #ffdd00;
+    text-align: center;
+    text-shadow: 0 3px 10px rgba(255, 255, 0, 0.7);
+    font-size: 2.8rem;
+    margin-bottom: 10px;
 }
 
 button {
-width: 100%;
-padding: 10px;
-border: none;
-border-radius: 5px;
-background: #ff4500;
-color: #fff;
-font-size: 1.2rem;
-cursor: pointer;
-transition: background 0.3s ease;
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background: #ff4500;
+    color: #fff;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: background 0.3s ease;
 }
 
 button:hover {
-background: #ff8800;
+    background: #ff8800;
 }
 
 .footer {
-margin-top: 40px;
-padding: 15px;
-background: #121212;
-color: #ffdd00;
-text-align: center;
-font-size: 1rem;
-border-top: 2px solid #ff4500;
+    margin-top: 40px;
+    padding: 15px;
+    background: #121212;
+    color: #ffdd00;
+    text-align: center;
+    font-size: 1rem;
+    border-top: 2px solid #ff4500;
 }
 </style>
 <script src="https://cdn.jsdelivr.net/npm/netlify-identity-widget@1.9.2/build/netlify-identity-widget.min.js"></script>
 </head>
 <body>
 <div class="container">
-<h1>Регистрация и Вход</h1>
-<button id="login-button">Войти / Зарегистрироваться</button>
+    <h1>Регистрация и Вход</h1>
+    <button id="login-button">Войти / Зарегистрироваться</button>
+    <div id="admin-panel" style="display: none; margin-top: 20px;">
+        <h2>Панель администратора</h2>
+        <p>Добро пожаловать в административные функции.</p>
+        <!-- Здесь добавьте любые элементы управления -->
+    </div>
 </div>
 
 <div class="footer">
-<p>Oramic Studio &copy; 2024</p>
+    <p>Oramic Studio &copy; 2024</p>
 </div>
 
 <script>
 document.getElementById('login-button').addEventListener('click', function() {
-netlifyIdentity.open();
+    netlifyIdentity.open();
 });
 
-netlifyIdentity.on('init', user => {
-if (!user) {
-netlifyIdentity.open();
-}
-});
+// Инициализация Netlify Identity
+netlifyIdentity.init();
 
+// Событие: вход
 netlifyIdentity.on('login', user => {
-console.log('Вход успешен: ', user);
-alert('Вход успешен!');
-netlifyIdentity.close();
+    console.log('Вход успешен: ', user);
+    alert('Вход успешен!');
+
+    // Проверка на роль
+    const roles = user.app_metadata && user.app_metadata.roles;
+    if (roles && (roles.includes('Mod') || roles.includes('Elder'))) {
+        document.getElementById('admin-panel').style.display = 'block';
+    } else {
+        document.getElementById('admin-panel').style.display = 'none';
+    }
+
+    netlifyIdentity.close();
 });
 
+// Событие: выход
 netlifyIdentity.on('logout', () => {
-console.log('Выход выполнен');
-alert('Выход выполнен!');
+    console.log('Выход выполнен');
+    alert('Выход выполнен!');
+    document.getElementById('admin-panel').style.display = 'none';
+});
+
+// Проверка на единственный аккаунт
+netlifyIdentity.on('signup', user => {
+    console.log('Регистрация пользователя:', user);
+    const email = user.email;
 });
 </script>
 </body>
