@@ -10,9 +10,9 @@ app.get('/', (req, res) => {
     res.send('Server is working');
 });
 
-// Пример подключения модуля
-// const exampleModule = require('/backend/test.js');
-// exampleModule(app);
+// Модули
+const loginModule = require('./login.js');
+loginModule(app);
 
 // Запуск сервера
 app.listen(port, () => {
