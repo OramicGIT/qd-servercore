@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Генерация случайного арта</title>
+    <style>
+        body {
+            font-family: 'Russo One', sans-serif;
+            background-color: #121212;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+        .canvas-container {
+            position: relative;
+            width: 80%;
+            height: 80%;
+            background-color: #333;
+            border-radius: 15px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        canvas {
+            display: block;
+        }
+        .button-container {
+            margin-top: 20px;
+            text-align: center;
+        }
+        .button {
+            padding: 10px 20px;
+            font-size: 1.2rem;
+            color: #fff;
+            background-color: #ff4500;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.3s;
+            border: none;
+        }
+        .button:hover {
+            background-color: #ff8800;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="canvas-container">
+        <canvas id="artCanvas"></canvas>
+    </div>
+    <div class="button-container">
+        <button class="button" id="generateButton">Сгенерировать арт</button>
+        <button class="button" id="downloadButton">Скачать арт</button>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('artCanvas');
+        const ctx = canvas.getContext('2d');
+
+        // Настройка размеров холста
+        const container = document.querySelector('.canvas-container');
+        canvas.width = container.offsetWidth;
+        canvas.height = container.offsetHeight;
+
+        // Функция для генерации случайного числа в диапазоне
+        function getRandom(min, max) {
+            return Math.random() * (max - min) + min;
+        }
+
+        // Функция для генерации случайного цвета
+        function getRandomColor() {
+            const r = Math.floor(Math.random() * 256);
+            const g = Math.floor(Math.random() * 256);
+            const b = Math.floor(Math.random() * 256);
+            return `rgb(${r},${g},${b})`;
+        }
+
+        // Функция для генерации арта
+        function generateRandomArt() {
+            // Очистка холста
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            const numberOfSquares = Math.floor(getRandom(10, 50)); // Количество квадратов
+
+            for (let i = 0; i < numberOfSquares; i++) {
+                const size = getRandom(50, 150); // Размер квадрата
+                const xPos = getRandom(0, canvas.width - size); // Позиция по X
+                const yPos = getRandom(0, canvas.height - size); // Позиция по Y
+                const rotation = getRandom(0, 360); // Угол поворота
+                const color = getRandomColor(); // Цвет
+
+                // Сохранение контекста
+                ctx.save();
+                ctx.translate(xPos + size / 2, yPos + size / 2);
+                ctx.rotate((rotation * Math.PI) / 180);
+                ctx.fillStyle = color;
+                ctx.fillRect(-size / 2, -size / 2, size, size);
+                // Восстановление контекста
+                ctx.restore();
+            }
+        }
+
+        // Функция для скачивания арта
+        function downloadArt() {
+            const link = document.createElement('a');
+            link.download = 'random-art.png';
+            link.href = canvas.toDataURL();
+            link.click();
+        }
+
+        // Обработчики событий
+        document.getElementById('generateButton').addEventListener('click', generateRandomArt);
+        document.getElementById('downloadButton').addEventListener('click', downloadArt);
+
+        // Сгенерировать арт при загрузке страницы
+        generateRandomArt();
+    </script>
+
+</body>
+</html>
