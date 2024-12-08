@@ -14,6 +14,7 @@ body {
     color: #f0f0f0;
     margin: 0;
     padding: 0;
+    overflow-x: hidden;
 }
 
 .container {
@@ -99,12 +100,22 @@ p {
     border-radius: 8px;
     box-shadow: 0 3px 10px rgba(0, 102, 255, 0.7);
     transition: all 0.3s ease;
+    margin: 10px;
 }
 
 .button:hover {
     background: linear-gradient(90deg, #0066ff, #00c3ff);
     transform: scale(1.05);
     box-shadow: 0 5px 15px rgba(0, 102, 255, 0.9);
+}
+
+.vote-button {
+    background: linear-gradient(90deg, #ff00c3, #ff0078);
+    color: #fff;
+}
+
+.vote-button:hover {
+    background: linear-gradient(90deg, #ff0078, #ff00c3);
 }
 </style>
 </head>
@@ -127,6 +138,7 @@ p {
     </div>
     <div class="button-container">
         <a href="login.html" class="button">Регистрация или Вход</a>
+        <a href="poll.html" class="button vote-button">Голосования</a>
     </div>
 </div>
 <div class="footer">
