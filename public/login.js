@@ -1,80 +1,90 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const bcrypt = require('bcrypt');
 const fs = require('fs');
 const path = require('path');
 
 const app = express();
 const PORT = 3000;
 
-// Обслуживание статических файлов
-app.use(express.static(path.join(__dirname, 'public')));
+// Путь к папке для временных файлов
+const TEMP_DIR = path.join(__dirname, 'temp');
 
-// Middleware для работы с JSON
+// Убедиться, что папка temp существует
+if (!fs.existsSync(TEMP_DIR)) {
+    fs.mkdirSync(TEMP_DIR, { recursive: true });
+}
+
+// Middleware для обработки JSON
 app.use(bodyParser.json());
 
-// Основной маршрут для регистрации и входа
-app.post('/account', (req, res) => {
+// Хранилище пользователей (читаем данные из файла при старте сервера)
+const usersFilePath = path.join(TEMP_DIR, 'users.json');
+let users = {};
+
+// Если файл пользователей существует, загружаем данные
+if (fs.existsSync(usersFilePath)) {
+    try {
+        users = JSON.parse(fs.readFileSync(usersFilePath, 'utf8'));
+    } catch (err) {
+        console.error('Ошибка при чтении файла пользователей:', err);
+    }
+}
+
+// Функция для сохранения пользователей в файл
+function saveUsersToFile() {
+    fs.writeFileSync(usersFilePath, JSON.stringify(users, null, 2));
+}
+
+// Регистрация
+app.post('/register', async (req, res) => {
     const { username, password } = req.body;
 
-    // Папка, где будут храниться файлы пользователей
-    const USERS_DIR = path.join(__dirname, 'public/backend/database/users');
-
-    // Проверяем входные данные
     if (!username || !password) {
-        return res.status(400).json({ message: 'Укажите имя пользователя и пароль.' });
+        return res.status(400).json({ error: 'Имя пользователя и пароль обязательны.' });
     }
 
-    // Убедитесь, что папка существует
-    if (!fs.existsSync(USERS_DIR)) {
-        fs.mkdirSync(USERS_DIR, { recursive: true });
+    if (users[username]) {
+        return res.status(400).json({ error: 'Пользователь с таким именем уже существует.' });
     }
 
-    // Получаем список файлов пользователей
-    const files = fs.readdirSync(USERS_DIR);
+    const hashedPassword = await bcrypt.hash(password, 10);
+    users[username] = {
+        password: hashedPassword,
+        roles: [], // Роли пользователя
+        email: null, // Дополнительные данные
+    };
 
-    // Проверяем, существует ли пользователь
-    const existingFile = files.find((file) => {
-        const filePath = path.join(USERS_DIR, file);
-        const userData = JSON.parse(fs.readFileSync(filePath));
-        return userData.name === username;
+    saveUsersToFile();
+    res.status(201).json({ message: 'Пользователь успешно зарегистрирован.' });
+});
+
+// Вход
+app.post('/login', async (req, res) => {
+    const { username, password } = req.body;
+
+    if (!username || !password) {
+        return res.status(400).json({ error: 'Имя пользователя и пароль обязательны.' });
+    }
+
+    const user = users[username];
+    if (!user) {
+        return res.status(404).json({ error: 'Пользователь не найден.' });
+    }
+
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!isPasswordValid) {
+        return res.status(401).json({ error: 'Неверный пароль.' });
+    }
+
+    res.status(200).json({
+        message: 'Вход выполнен успешно.',
+        user: {
+            username,
+            roles: user.roles,
+            email: user.email,
+        },
     });
-
-    if (existingFile) {
-        // Если пользователь найден, проверяем пароль
-        const userData = JSON.parse(fs.readFileSync(path.join(USERS_DIR, existingFile)));
-        if (userData.password === password) {
-            return res.status(200).json({ message: `Добро пожаловать, ${username}!` });
-        } else {
-            return res.status(401).json({ message: 'Неверный пароль.' });
-        }
-    } else {
-        // Если пользователь не найден, создаём нового
-        const newUser = {
-            perms: "",
-            owngame: "false",
-            canall: "false:debugno",
-            developer: "0",
-            name: username,
-            clan: "",
-            password: password,
-            commentscol: "255,255,255",
-            can_server: "false",
-            orbs: "0",
-            diamonds: "0",
-            icons: "default pack",
-            coins1: "0",
-            coins2: "0",
-            coins3: "0",
-            versuspoints: "0",
-            stars: "0",
-        };
-
-        // Определяем имя нового файла (следующий по порядку)
-        const newFilename = path.join(USERS_DIR, `${files.length + 1}.json`);
-        fs.writeFileSync(newFilename, JSON.stringify(newUser, null, 2));
-
-        return res.status(201).json({ message: `Аккаунт зарегистрирован! Добро пожаловать, ${username}.` });
-    }
 });
 
 // Запуск сервера
