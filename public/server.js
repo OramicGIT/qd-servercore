@@ -12,7 +12,9 @@ app.get('/', (req, res) => {
 
 // Модули
 const loginModule = require('./login.js');
+const lvlSpecModule = require('./getSpecial.js');
 loginModule(app);
+lvlSpecModule(app);
 
 // Запуск сервера
 app.listen(port, () => {
