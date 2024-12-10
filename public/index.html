@@ -28,6 +28,34 @@ body {
     border: 3px solid #ff4500;
 }
 
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background: #121212;
+    border-bottom: 2px solid #ff4500;
+    border-radius: 15px 15px 0 0;
+    margin-bottom: 20px;
+}
+
+.header a {
+    text-decoration: none;
+    color: #fff;
+    font-size: 1.2rem;
+    padding: 10px 15px;
+    border-radius: 8px;
+    background: linear-gradient(90deg, #00c3ff, #0066ff);
+    box-shadow: 0 3px 10px rgba(0, 102, 255, 0.7);
+    transition: all 0.3s ease;
+}
+
+.header a:hover {
+    background: linear-gradient(90deg, #0066ff, #00c3ff);
+    transform: scale(1.05);
+    box-shadow: 0 5px 15px rgba(0, 102, 255, 0.9);
+}
+
 h1 {
     color: #ffdd00;
     text-align: center;
@@ -84,56 +112,20 @@ p {
     font-size: 1rem;
     border-top: 2px solid #ff4500;
 }
-
-.button-container {
-    margin-top: 20px;
-    text-align: center;
-}
-
-.button {
-    display: inline-block;
-    padding: 10px 20px;
-    font-size: 1.2rem;
-    color: #fff;
-    background: linear-gradient(90deg, #00c3ff, #0066ff);
-    text-decoration: none;
-    border-radius: 8px;
-    box-shadow: 0 3px 10px rgba(0, 102, 255, 0.7);
-    transition: all 0.3s ease;
-    margin: 10px;
-}
-
-.button:hover {
-    background: linear-gradient(90deg, #0066ff, #00c3ff);
-    transform: scale(1.05);
-    box-shadow: 0 5px 15px rgba(0, 102, 255, 0.9);
-}
-
-.vote-button {
-    background: linear-gradient(90deg, #ff00c3, #ff0078);
-    color: #fff;
-}
-
-.vote-button:hover {
-    background: linear-gradient(90deg, #ff0078, #ff00c3);
-}
-
-.art-button {
-    background: linear-gradient(90deg, #00ff80, #00c350);
-    color: #fff;
-}
-
-.art-button:hover {
-    background: linear-gradient(90deg, #00c350, #00ff80);
-}
 </style>
 </head>
 <body>
+<div class="header">
+    <a href="login.html">Регистрация или Вход</a>
+    <a href="poll.html">Голосования</a>
+    <a href="randomart.html">Генерация арта</a>
+    <a href="talk.html">Чат</a>
+</div>
 <div class="container">
     <h1>Geometry Dash Map</h1>
     <p>Добро пожаловать в новую Geometry Dash Map! Исследуйте уникальные уровни, башни и многое другое!</p>
     <div class="version-info">
-        <h2>Особенности карты</h2>
+        <h2>Особенности игры</h2>
         <div class="features">
             <ul>
                 <li>Карта с уровнями</li>
@@ -144,11 +136,6 @@ p {
                 <li>Многое другое...</li>
             </ul>
         </div>
-    </div>
-    <div class="button-container">
-        <a href="login.html" class="button">Регистрация или Вход</a>
-        <a href="poll.html" class="button vote-button">Голосования</a>
-        <a href="randomart.html" class="button art-button">Генерация арта</a>
     </div>
 </div>
 <div class="footer">
