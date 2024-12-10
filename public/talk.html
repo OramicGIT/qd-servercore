@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Geometry Map Talk</title>
+    <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Russo+One&display=swap');
+
+        body {
+            font-family: 'Russo One', sans-serif;
+            background: linear-gradient(90deg, #000000, #121212);
+            color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 30px auto;
+            background: #222;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.8);
+            border: 3px solid #ff4500;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        header h1 {
+            color: #ffdd00;
+            text-shadow: 0 3px 10px rgba(255, 255, 0, 0.7);
+            font-size: 2.8rem;
+            margin: 0;
+        }
+
+        #auth, #chat {
+            text-align: center;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .chat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #333;
+            padding: 10px 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .chat-header h2 {
+            color: #ffdd00;
+            margin: 0;
+        }
+
+        .chat-header button {
+            padding: 10px 20px;
+            font-size: 1rem;
+            background: linear-gradient(90deg, #ff4500, #ff8800);
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(255, 69, 0, 0.6);
+        }
+
+        .chat-header button:hover {
+            background: linear-gradient(90deg, #ff8800, #ff4500);
+        }
+
+        .messages {
+            height: 300px;
+            overflow-y: auto;
+            background: #121212;
+            padding: 15px;
+            border: 2px solid #ffdd00;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .messages div {
+            margin: 5px 0;
+            padding: 10px;
+            background: #333;
+            color: #fff;
+            border-radius: 8px;
+        }
+
+        #messageInput {
+            width: 75%;
+            padding: 10px;
+            font-size: 1.2rem;
+            border: 2px solid #ff4500;
+            border-radius: 8px;
+            margin-right: 10px;
+        }
+
+        #sendMessage {
+            padding: 10px 20px;
+            font-size: 1rem;
+            background: linear-gradient(90deg, #00c3ff, #0066ff);
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0, 102, 255, 0.7);
+        }
+
+        #sendMessage:hover {
+            background: linear-gradient(90deg, #0066ff, #00c3ff);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Geometry Map Talk</h1>
+        </header>
+        <div id="auth">
+            <button id="loginBtn">Login / Register</button>
+        </div>
+        <div id="chat" class="hidden">
+            <div class="chat-header">
+                <h2>General Chat</h2>
+                <button id="logout">Logout</button>
+            </div>
+            <div class="messages"></div>
+            <input type="text" id="messageInput" placeholder="Type your message...">
+            <button id="sendMessage">Send</button>
+        </div>
+    </div>
+
+    <script>
+        const authDiv = document.getElementById('auth');
+        const chatDiv = document.getElementById('chat');
+        const loginBtn = document.getElementById('loginBtn');
+        const logoutBtn = document.getElementById('logout');
+        const messagesDiv = document.querySelector('.messages');
+        const messageInput = document.getElementById('messageInput');
+        const sendMessageBtn = document.getElementById('sendMessage');
+
+        // Initialize Netlify Identity
+        netlifyIdentity.on('login', () => {
+            authDiv.classList.add('hidden');
+            chatDiv.classList.remove('hidden');
+            netlifyIdentity.close();
+        });
+
+        netlifyIdentity.on('logout', () => {
+            authDiv.classList.remove('hidden');
+            chatDiv.classList.add('hidden');
+        });
+
+        loginBtn.addEventListener('click', () => {
+            netlifyIdentity.open();
+        });
+
+        logoutBtn.addEventListener('click', () => {
+            netlifyIdentity.logout();
+        });
+
+        // Dummy messages array
+        const messages = [];
+
+        // Render messages
+        function renderMessages() {
+            messagesDiv.innerHTML = '';
+            messages.forEach((msg) => {
+                const div = document.createElement('div');
+                div.textContent = msg;
+                messagesDiv.appendChild(div);
+            });
+        }
+
+        // Send message
+        sendMessageBtn.addEventListener('click', () => {
+            const text = messageInput.value.trim();
+            if (text) {
+                messages.push(text);
+                renderMessages();
+                messageInput.value = '';
+            }
+        });
+    </script>
+</body>
+</html>
