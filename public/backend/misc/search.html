@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GD Map Search</title>
+    <script async src="https://cse.google.com/cse.js?cx=94be623d783424ff7"></script>
+    <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        header, footer {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        footer p {
+            font-size: 14px;
+        }
+        #login-section {
+            text-align: right;
+            margin-bottom: 20px;
+        }
+        .gcse-searchbox, .gcse-searchresults {
+            margin: 20px 0;
+        }
+        form {
+            margin-top: 20px;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #007BFF;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>GD Map Search</h1>
+        </header>
+
+        <!-- Netlify Identity Login Section -->
+        <div id="login-section">
+            <button id="login-btn">Log in</button>
+            <button id="logout-btn" style="display: none;">Log out</button>
+        </div>
+
+        <!-- Поисковая строка -->
+        <div class="gcse-searchbox"></div>
+
+        <!-- Результаты поиска -->
+        <div class="gcse-searchresults"></div>
+
+        <!-- Форма обратной связи -->
+        <h2>Contact Us</h2>
+        <form name="contact" method="POST" data-netlify="true">
+            <input type="hidden" name="form-name" value="contact">
+            <input type="text" name="name" placeholder="Your Name" required>
+            <input type="email" name="email" placeholder="Your Email" required>
+            <textarea name="message" placeholder="Your Message" rows="5" required></textarea>
+            <button type="submit">Send Message</button>
+        </form>
+
+        <footer>
+            <p>&copy; 2024 GD Map. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <script>
+        // Initialize Netlify Identity
+        netlifyIdentity.init();
+
+        const loginBtn = document.getElementById('login-btn');
+        const logoutBtn = document.getElementById('logout-btn');
+
+        // Show or hide buttons based on login status
+        netlifyIdentity.on('init', (user) => {
+            toggleAuthButtons(user);
+        });
+
+        netlifyIdentity.on('login', (user) => {
+            console.log('Logged in:', user);
+            toggleAuthButtons(user);
+        });
+
+        netlifyIdentity.on('logout', () => {
+            console.log('Logged out');
+            toggleAuthButtons(null);
+        });
+
+        loginBtn.addEventListener('click', () => {
+            netlifyIdentity.open('login');
+        });
+
+        logoutBtn.addEventListener('click', () => {
+            netlifyIdentity.logout();
+        });
+
+        function toggleAuthButtons(user) {
+            if (user) {
+                loginBtn.style.display = 'none';
+                logoutBtn.style.display = 'inline-block';
+            } else {
+                loginBtn.style.display = 'inline-block';
+                logoutBtn.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>
