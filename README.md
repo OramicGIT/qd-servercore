@@ -1,17 +1,14 @@
 OramicGIT-map Core.
-You can edit all, but don't touch file 1 in users. This is copyright sign.
+You can edit all, but don't touch file donotremove.so, this is copyright sign.
 
-#Public
-Public contains all scripts
+Folders:
+Public contains all scripts and assets.
+Logs contains all logs for scripts (by default it's containing only .gitkeep).
+Debug files this is temporarity storage for scripts.
 
-#Logs
-Logs contains all logs
-
-#Temp
-Debug files and temporarity storage
-
+Notes:
 Maked on Node.js, JavaScript and HTML
-Original host:Netlify
+Original host:Netlify (Site created with Netlify widgets)
 Can be used for other games
 
 Oramic Studio (C) 2024-2025
