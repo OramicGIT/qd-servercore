@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -119,6 +119,18 @@
         #sendMessage:hover {
             background: linear-gradient(90deg, #0066ff, #00c3ff);
         }
+
+        .buttons {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+        }
+
+        .buttons img {
+            width: 50px;
+            height: 50px;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -127,12 +139,21 @@
             <h1>Geometry Map Talk</h1>
         </header>
         <div id="auth">
-            <button id="loginBtn">Login / Register</button>
+            <button id="loginBtn">Войти / Зарегистрироваться</button>
         </div>
         <div id="chat" class="hidden">
             <div class="chat-header">
                 <h2>General Chat</h2>
                 <button id="logout">Logout</button>
+            </div>
+            <div class="buttons">
+                <img src="backend/assets/arrow-left.png" alt="Arrow Left" id="arrowLeft" class="hidden">
+                <img src="backend/assets/arrow-right.png" alt="Arrow Right" id="arrowRight" class="hidden">
+                <img src="backend/assets/github.png" alt="GitHub" onclick="window.open('https://github.com/OramicGIT', '_blank')">
+                <img src="backend/assets/contact.png" alt="Contact" onclick="location.href='mailto:puhistdos@gmail.com'">
+                <img src="backend/assets/demonButton.png" alt="Demon Button" id="demonButton" class="hidden">
+                <img src="backend/assets/ulButton.png" alt="Achievements" id="ulButton" class="hidden">
+                <img src="backend/assets/underConstruction_001.png" alt="Under Construction" id="underConstruction" class="hidden">
             </div>
             <div class="messages"></div>
             <input type="text" id="messageInput" placeholder="Type your message...">
@@ -149,16 +170,24 @@
         const messageInput = document.getElementById('messageInput');
         const sendMessageBtn = document.getElementById('sendMessage');
 
+        const arrowLeft = document.getElementById('arrowLeft');
+        const arrowRight = document.getElementById('arrowRight');
+        const demonButton = document.getElementById('demonButton');
+        const ulButton = document.getElementById('ulButton');
+        const underConstruction = document.getElementById('underConstruction');
+
         // Initialize Netlify Identity
         netlifyIdentity.on('login', () => {
             authDiv.classList.add('hidden');
             chatDiv.classList.remove('hidden');
             netlifyIdentity.close();
+            activateButtons();
         });
 
         netlifyIdentity.on('logout', () => {
             authDiv.classList.remove('hidden');
             chatDiv.classList.add('hidden');
+            deactivateButtons();
         });
 
         loginBtn.addEventListener('click', () => {
@@ -169,28 +198,60 @@
             netlifyIdentity.logout();
         });
 
-        // Dummy messages array
-        const messages = [];
+        // WebSocket connection
+        const socket = new WebSocket('wss://your-websocket-server-url');
+
+        socket.onmessage = (event) => {
+            const data = JSON.parse(event.data);
+            if (data.type === 'message') {
+                addMessage(data.message);
+            }
+        };
 
         // Render messages
-        function renderMessages() {
-            messagesDiv.innerHTML = '';
-            messages.forEach((msg) => {
-                const div = document.createElement('div');
-                div.textContent = msg;
-                messagesDiv.appendChild(div);
-            });
+        function addMessage(message) {
+            const div = document.createElement('div');
+            div.textContent = message;
+            messagesDiv.appendChild(div);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
         }
 
         // Send message
         sendMessageBtn.addEventListener('click', () => {
             const text = messageInput.value.trim();
             if (text) {
-                messages.push(text);
-                renderMessages();
+                socket.send(JSON.stringify({ type: 'message', message: text }));
                 messageInput.value = '';
             }
         });
+
+        // Handle connection errors
+        socket.onerror = (error) => {
+            console.error('WebSocket error:', error);
+        };
+
+        // Handle connection close
+        socket.onclose = () => {
+            console.warn('WebSocket connection closed');
+        };
+
+        // Activate buttons in specific areas
+        function activateButtons() {
+            arrowLeft.classList.remove('hidden');
+            arrowRight.classList.remove('hidden');
+            demonButton.classList.remove('hidden');
+            ulButton.classList.remove('hidden');
+            underConstruction.classList.remove('hidden');
+        }
+
+        // Deactivate buttons
+        function deactivateButtons() {
+            arrowLeft.classList.add('hidden');
+            arrowRight.classList.add('hidden');
+            demonButton.classList.add('hidden');
+            ulButton.classList.add('hidden');
+            underConstruction.classList.add('hidden');
+        }
     </script>
 </body>
 </html>
