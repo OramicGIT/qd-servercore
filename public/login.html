@@ -26,11 +26,10 @@ body {
     border: 3px solid #ff4500;
 }
 
-h1 {
+h1, h2 {
     color: #ffdd00;
     text-align: center;
     text-shadow: 0 3px 10px rgba(255, 255, 0, 0.7);
-    font-size: 2.8rem;
     margin-bottom: 10px;
 }
 
@@ -44,6 +43,7 @@ button {
     font-size: 1.2rem;
     cursor: pointer;
     transition: background 0.3s ease;
+    margin-top: 10px;
 }
 
 button:hover {
@@ -69,7 +69,10 @@ button:hover {
     <div id="admin-panel" style="display: none; margin-top: 20px;">
         <h2>Панель администратора</h2>
         <p>Добро пожаловать в административные функции.</p>
-        <!-- Здесь добавьте любые элементы управления -->
+        <button onclick="updateUser()">Обновить профиль</button>
+        <button onclick="changeEmail()">Изменить почту</button>
+        <button onclick="changePassword()">Изменить пароль</button>
+        <button onclick="deleteUser()">Удалить аккаунт</button>
     </div>
 </div>
 
@@ -107,6 +110,80 @@ netlifyIdentity.on('logout', () => {
     alert('Выход выполнен!');
     document.getElementById('admin-panel').style.display = 'none';
 });
+
+// Функция обновления профиля
+function updateUser() {
+    const user = netlifyIdentity.currentUser();
+    if (user) {
+        const newName = prompt('Введите новое имя', user.user_metadata.full_name);
+        user.update({
+            data: {
+                full_name: newName
+            }
+        }).then(user => {
+            alert('Профиль успешно обновлен!');
+        }).catch(error => {
+            console.error('Ошибка обновления профиля:', error);
+            alert('Не удалось обновить профиль.');
+        });
+    } else {
+        alert('Нет текущего пользователя.');
+    }
+}
+
+// Функция изменения почты
+function changeEmail() {
+    const user = netlifyIdentity.currentUser();
+    if (user) {
+        const newEmail = prompt('Введите новый email', user.email);
+        user.update({
+            email: newEmail
+        }).then(user => {
+            alert('Email успешно обновлен!');
+        }).catch(error => {
+            console.error('Ошибка изменения email:', error);
+            alert('Не удалось изменить email.');
+        });
+    } else {
+        alert('Нет текущего пользователя.');
+    }
+}
+
+// Функция изменения пароля
+function changePassword() {
+    const user = netlifyIdentity.currentUser();
+    if (user) {
+        const newPassword = prompt('Введите новый пароль');
+        user.update({
+            password: newPassword
+        }).then(user => {
+            alert('Пароль успешно изменен!');
+        }).catch(error => {
+            console.error('Ошибка изменения пароля:', error);
+            alert('Не удалось изменить пароль.');
+        });
+    } else {
+        alert('Нет текущего пользователя.');
+    }
+}
+
+// Функция удаления аккаунта
+function deleteUser() {
+    const user = netlifyIdentity.currentUser();
+    if (user) {
+        if (confirm('Вы уверены, что хотите удалить аккаунт? Это действие невозможно отменить.')) {
+            user.delete().then(() => {
+                alert('Аккаунт успешно удален.');
+                netlifyIdentity.logout();
+            }).catch(error => {
+                console.error('Ошибка удаления аккаунта:', error);
+                alert('Не удалось удалить аккаунт.');
+            });
+        }
+    } else {
+        alert('Нет текущего пользователя.');
+    }
+}
 
 // Проверка на единственный аккаунт
 netlifyIdentity.on('signup', user => {
