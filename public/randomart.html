@@ -86,10 +86,11 @@
             // Очистка холста
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-            const numberOfSquares = Math.floor(getRandom(10, 50)); // Количество квадратов
+            const numberOfShapes = Math.floor(getRandom(10, 50)); // Количество фигур
 
-            for (let i = 0; i < numberOfSquares; i++) {
-                const size = getRandom(50, 150); // Размер квадрата
+            for (let i = 0; i < numberOfShapes; i++) {
+                const shapeType = Math.floor(getRandom(0, 3)); // Тип фигуры: 0 - квадрат, 1 - круг, 2 - треугольник
+                const size = getRandom(50, 150); // Размер фигуры
                 const xPos = getRandom(0, canvas.width - size); // Позиция по X
                 const yPos = getRandom(0, canvas.height - size); // Позиция по Y
                 const rotation = getRandom(0, 360); // Угол поворота
@@ -100,7 +101,25 @@
                 ctx.translate(xPos + size / 2, yPos + size / 2);
                 ctx.rotate((rotation * Math.PI) / 180);
                 ctx.fillStyle = color;
-                ctx.fillRect(-size / 2, -size / 2, size, size);
+
+                if (shapeType === 0) {
+                    // Квадрат
+                    ctx.fillRect(-size / 2, -size / 2, size, size);
+                } else if (shapeType === 1) {
+                    // Круг
+                    ctx.beginPath();
+                    ctx.arc(0, 0, size / 2, 0, Math.PI * 2);
+                    ctx.fill();
+                } else if (shapeType === 2) {
+                    // Треугольник
+                    ctx.beginPath();
+                    ctx.moveTo(0, -size / 2);
+                    ctx.lineTo(size / 2, size / 2);
+                    ctx.lineTo(-size / 2, size / 2);
+                    ctx.closePath();
+                    ctx.fill();
+                }
+
                 // Восстановление контекста
                 ctx.restore();
             }
