@@ -5,13 +5,5 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
-  },
-  "author": "Oramic Studio",
-  "license": "ISC",
-  "dependencies": {
-    "express": "^4.17.1",
-    "body-parser": "^1.19.0",
-    "zlib": "^1.0.5",
-    "crypto": "^1.0.1"
   }
 }
