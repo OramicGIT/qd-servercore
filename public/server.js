@@ -14,9 +14,11 @@ app.get('/', (req, res) => {
 const lvlSpecModule = require('./getSpecial.js');
 const lvlModule = require('./getGDlevel.js');
 const heartModule = require('./backend/incl/uppd/update.js');
+const reuploadModule = require('./backend/config/reuploadss.js');
 heartModule(app);
 lvlSpecModule(app);
 lvlModule(app);
+reuploadModule(app);
 
 // Запуск сервера
 app.listen(port, () => {
