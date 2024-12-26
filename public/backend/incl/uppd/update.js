@@ -1,7 +1,7 @@
 // Функция для проверки состояния сервера
 async function checkServerHealth() {
     try {
-        const response = await fetch('/status'); // Эндпоинт для проверки состояния
+        const response = await fetch('/.netlify/functions/status'); // Эндпоинт для проверки состояния на Netlify
         if (!response.ok) {
             console.error('Server health check failed:', response.statusText);
             applyFixes();
@@ -18,12 +18,12 @@ async function checkServerHealth() {
 async function applyFixes() {
     console.log('Applying fixes...');
     try {
-        // Перезагрузка кэша (пример)
-        const cacheFix = await fetch('/fix-cache', { method: 'POST' });
+        // Перезагрузка кэша на Netlify
+        const cacheFix = await fetch('/.netlify/functions/fix-cache', { method: 'POST' });
         if (!cacheFix.ok) throw new Error('Cache fix failed');
         
-        // Перезапуск служб (пример)
-        const serviceRestart = await fetch('/restart-services', { method: 'POST' });
+        // Перезапуск скриптов на Netlify
+        const serviceRestart = await fetch('/.netlify/functions/restart-services', { method: 'POST' });
         if (!serviceRestart.ok) throw new Error('Service restart failed');
         
         console.log('Fixes applied successfully.');
