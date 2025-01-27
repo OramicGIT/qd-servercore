@@ -1,4 +1,4 @@
-OramicGIT-map Core.
+Quantum Dash Core.
 You can edit all, but don't touch file donotremove.so, this is copyright sign.
 
 Folders:
